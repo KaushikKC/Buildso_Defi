@@ -4,7 +4,6 @@ import QuoteView from "../Quote";
 import { useAccount } from "wagmi";
 import PriceView from "../Price";
 import { PriceResponse } from "../api/types";
-import Navbar from "@/components/navbar";
 
 function Swap() {
   const [finalize, setFinalize] = useState(false);
