@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Web3Modal } from "@/context/Web3Model";
+import {
+  ConnectKitButton,
+  ConnectKitProvider,
+  getDefaultConfig,
+} from "connectkit";
+import { WagmiConfig, createConfig, sepolia } from "wagmi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Web3Modal>{children}</Web3Modal>
+      </body>
     </html>
   );
 }
