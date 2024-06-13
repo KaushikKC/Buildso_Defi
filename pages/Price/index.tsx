@@ -290,7 +290,7 @@ function ApproveOrReviewButton({
     );
   }
 
-  if (allowance === 0n && approveAsync) {
+  if (allowance === BigInt(0) && approveAsync) {
     return (
       <>
         <button
