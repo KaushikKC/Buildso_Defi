@@ -1,7 +1,12 @@
 import Link from "next/link";
 import React from "react";
 
-function Navbar({ page, setPage }: any) {
+interface NavbarProps {
+  page: string;
+  setPage: (page: string) => void;
+}
+
+function Navbar({ page, setPage }: NavbarProps) {
   return (
     <div className="flex justify-between px-10 h-[100px]  drop-shadow-xl items-center">
       <h1 className="text-white font-bold text-xl">BUILDSO DEFI</h1>

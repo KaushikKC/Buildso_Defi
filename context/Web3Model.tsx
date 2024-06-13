@@ -27,6 +27,6 @@ createWeb3Modal({
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
 });
 
-export function Web3Modal({ children }) {
+export function Web3Modal({ children }: any) {
   return <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>;
 }

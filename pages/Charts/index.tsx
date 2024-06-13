@@ -1,11 +1,10 @@
 "use client";
-// components/PriceChart.tsx
 import { useState, useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import axios from "axios";
 import { Chart, registerables } from "chart.js";
-import { io } from "socket.io-client"; // Import socket.io-client
-import "chartjs-adapter-date-fns"; // Import the date adapter
+import { io } from "socket.io-client";
+import "chartjs-adapter-date-fns";
 Chart.register(...registerables);
 
 const PriceChart = () => {
@@ -20,6 +19,8 @@ const PriceChart = () => {
   useEffect(() => {
     fetchTopCryptos();
     fetchPriceData(selectedCrypto, timeFrame);
+    const interval = setInterval(() => fetchLatestPrice(selectedCrypto), 60000);
+    return () => clearInterval(interval);
   }, [selectedCrypto, timeFrame]);
 
   useEffect(() => {
@@ -78,6 +79,41 @@ const PriceChart = () => {
       });
     } catch (error) {
       console.error("Error fetching price data:", error);
+    }
+  };
+
+  const fetchLatestPrice = async (cryptoId: string) => {
+    try {
+      const res = await axios.get(
+        `https://api.coingecko.com/api/v3/simple/price`,
+        {
+          params: {
+            ids: cryptoId,
+            vs_currencies: "usd",
+          },
+        }
+      );
+
+      const latestPrice = res.data[cryptoId].usd;
+      const newPriceData = {
+        x: new Date(),
+        y: latestPrice,
+      };
+
+      setChartData((prevData: any) => {
+        const updatedData = [...prevData.datasets[0].data, newPriceData];
+        return {
+          ...prevData,
+          datasets: [
+            {
+              ...prevData.datasets[0],
+              data: updatedData,
+            },
+          ],
+        };
+      });
+    } catch (error) {
+      console.error("Error fetching latest price:", error);
     }
   };
 
@@ -191,27 +227,27 @@ const PriceChart = () => {
                 title: {
                   display: true,
                   text: "Date",
-                  color: "white", // Set the color of the x-axis title
+                  color: "white",
                 },
                 ticks: {
-                  color: "white", // Set the color of the x-axis ticks
+                  color: "white",
                 },
               },
               y: {
                 title: {
                   display: true,
                   text: "Price (USD)",
-                  color: "white", // Set the color of the y-axis title
+                  color: "white",
                 },
                 ticks: {
-                  color: "white", // Set the color of the y-axis ticks
+                  color: "white",
                 },
               },
             },
             plugins: {
               legend: {
                 labels: {
-                  color: "white", // Set the color of the legend labels
+                  color: "white",
                 },
               },
             },
